@@ -1,3 +1,5 @@
+#   (№1 = 3 дописати код)  (№2 = 125 завдання 1)
+#11111111111111111111111111111111111111111111111111111111111111111111111111
 import random
 class Human:
 
@@ -116,3 +118,60 @@ class Job:
         self.job = random.choice(list(job_list))
         self.salary =job_list[self.job]['salary']
         self.gladness_less = job_list[self.job]['gladness_less']
+
+
+
+
+#22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+class Class1:
+    def __init__(self):
+        print('hello')
+
+class Class2(Class1):
+    def __init__(self):
+        super().__init__()
+        print('World')
+
+x = Class2()
+
+class Class1:
+    var = 20
+    def __init__(self):
+        self.var = 10
+
+class Class2(Class1):
+    def __init__(self):
+        print(self.var)
+        super().__init__()
+        print(self.var)
+        print(super().var)
+
+x = Class2()
+
+class Computer:
+
+    def __init__(self, model, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.model = model
+        self.memory = 128
+
+    def calculate(self):
+        print("calculating...")
+class Display:
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.resolution = '4k'
+    def display(self):
+        print('I show the image on the screen..')
+
+class SmartPhone(Display, Computer):
+    def info(self):
+        print(self.model)
+        print(self.memory)
+        print(self.resolution)
+
+
+iphone = SmartPhone(model='Redmi Galaxy X3')
+iphone.display()
+iphone.calculate()
+iphone.info()
