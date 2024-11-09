@@ -1,39 +1,25 @@
-class Son1:
-    def __init__(self):
-        self.attribute_son1 = "Attribute from Son1"
-    
-    def method_son1(self):
-        return "Method from Son1"
+import inspect
+import colorama
 
-class Son2:
-    def __init__(self):
-        self.attribute_son2 = "Attribute from Son2"
-    
-    def method_son2(self):
-        return "Method from Son2"
-
-class Son3:
-    def __init__(self):
-        self.attribute_son3 = "Attribute from Son3"
-    
-    def method_son3(self):
-        return "Method from Son3"
-
-class Father:
-    def __init__(self):
-        self.son1 = Son1()
-        self.son2 = Son2()
-        self.son3 = Son3()
-
-    def show_all_attributes_and_methods(self):
-        print(self.son1.attribute_son1)
-        print(self.son1.method_son1())
-        
-        print(self.son2.attribute_son2)
-        print(self.son2.method_son2())
-        
-        print(self.son3.attribute_son3)
-        print(self.son3.method_son3())
-
-father_instance = Father()
-father_instance.show_all_attributes_and_methods()
+print(__name__)
+print(inspect.ismodule(colorama))
+print(inspect.ismethod(colorama))
+print(inspect.isfunction(colorama))
+print(inspect.isclass(colorama))
+print(callable(colorama))
+print(colorama.__name__)
+print(colorama.__init__)
+print(colorama.__doc__)
+print(colorama.__dir__)
+print(colorama.__version__)
+print(colorama.__file__)
+print(colorama.__cached__)
+print(colorama.__builtins__)
+print(colorama.__spec__)
+print(colorama.__package__)
+print(colorama)
+for item in dir():
+    print(item)
+print(colorama)
+help(colorama)
+print("colorama -  це модуль він може змінювати колір тексту ")
