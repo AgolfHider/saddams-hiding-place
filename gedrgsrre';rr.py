@@ -1,35 +1,39 @@
-# import urllib.request as rq
-#
-# opener = rq.build_opener()
-# response = opener.open('https://httpbin.org/get')
-#
-# print(response.read())
-
-
-#
-# response = requests.get('https://httpbin.org/get')
-# print(response.text)
-#
-# response = requests.post(
-#     'https://httpbin.org/post',
-#     data='Test data',
-#     headers={'MyHeader': 'Test Title'}
-# )
-# print(response.text)
 import requests
-result_list = []
-response = requests.get('https://coinmarketcap.com/currencies/hamster-kombat/')
-page_text = response.text
-parse_page_text = page_text.split('<span>')
-for parse_elem_1 in parse_page_text:
-    if parse_elem_1.startswith('$'):
-        for parse_elem_2 in parse_elem_1.split('</span>'):
-            if (parse_elem_2.startswith('$') and parse_elem_2[1].isdigit() ):
-               result_list.append(parse_elem_2)
-
-print(f'HMSTR Rate: {result_list[4]}')
-
-
 from bs4 import BeautifulSoup
 
-response = requests.get('https://coinmarketcap.com/')
+url = "http://books.toscrape.com"
+response = requests.get(url)
+response.encoding = 'utf-8'
+soup = BeautifulSoup(response.text, 'html.parser')
+
+def get_book_titles(soup):
+    titles = [book.get_text() for book in soup.find_all('h3')]
+    return titles
+
+def get_book_prices(soup):
+    prices = [price.get_text().replace('Â', '') for price in soup.find_all('p', class_='price_color')]
+    return prices
+
+def get_books_info(soup):
+    books_info = []
+    books = soup.find_all('article', class_='product_pod')
+    for book in books:
+        title = book.find('h3').find('a')['title']
+        price = book.find('p', class_='price_color').get_text().replace('Â', '')
+        rating = book.find('p', class_='star-rating')['class'][1]
+        books_info.append({'title': title, 'price': price, 'rating': rating})
+    return books_info
+
+titles = get_book_titles(soup)
+prices = get_book_prices(soup)
+books_info = get_books_info(soup)
+
+print("Назви книг:")
+print(titles)
+
+print("\nЦіни книг:")
+print(prices)
+
+print("\nІнформація про всі книги:")
+for book in books_info:
+    print(book)
