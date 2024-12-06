@@ -1,9 +1,3 @@
-#Завдання не зовсім вийшло, можливо сайт блокує, але воно має працювати спочатку знайти інформацію з сайту про погоду,
-# програма візьме день неділі і місяця, і погоду(хмарно, ясно, сонячно, вітряно і тд) в один table названий "date & time"
-#і візьме темературу та розмістить її в другий table названий "temperature", ці 2 table находяться в ДБ "weather.db". Назви функцій і змінних повязані з книжками через те,
-#що код був взятий з мого попереднього проекту.
-
-
 import sqlite3
 import requests
 from bs4 import BeautifulSoup
@@ -52,4 +46,48 @@ connection.commit()
 cursor.execute(
     'insert into second_table (temperature) values (prices);'
 )
+connection.close()import sqlite3
+import requests
+from bs4 import BeautifulSoup
+from datetime import datetime
+
+url = "https://weather.com/uk-UA/weather/tenday/l/Zhytomyr+Zhytomyr+Oblast?canonicalCityId=9a3b9955c26967ab4fdf6a1386d68b0af56865b3059665ebbfbf3e11d368c992"
+
+response = requests.get(url)
+response.encoding = 'utf-8'
+soup = BeautifulSoup(response.text, 'html.parser')
+
+def get_temperature_data(soup):
+    days = soup.find_all('h2', class_='DetailsSummary--daypartName--1Mebr') 
+    temperatures = soup.find_all('span', class_='DetailsSummary--tempValue--1K4ka') 
+
+    weather_data = []
+    for day, temp in zip(days, temperatures):
+        weather_data.append({
+            'date': day.get_text(),
+            'temperature': temp.get_text().replace('°', '')
+        })
+    return weather_data
+
+weather_data = get_temperature_data(soup)
+
+connection = sqlite3.connect('weather.db')
+cursor = connection.cursor()
+
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS weather_data (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    date_time TEXT,
+    temperature TEXT
+)
+''')
+
+for data in weather_data:
+    cursor.execute('''
+    INSERT INTO weather_data (date_time, temperature)
+    VALUES (?, ?)
+    ''', (data['date'], data['temperature']))
+
+connection.commit()
 connection.close()
+
